@@ -1,4 +1,16 @@
-9월 29, 2023 11:21:26 오후 LoggerManager logInfo
-정보: [*] AES256 encryption done
-9월 29, 2023 11:21:26 오후 LoggerManager logInfo
-정보: [*] AES256 decryption done
+9월 30, 2023 3:31:22 오전 LoggerManager logError
+심각: [-] client error
+java.net.ConnectException: Connection refused: connect
+	at java.base/java.net.PlainSocketImpl.connect0(Native Method)
+	at java.base/java.net.PlainSocketImpl.socketConnect(PlainSocketImpl.java:101)
+	at java.base/java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:412)
+	at java.base/java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:255)
+	at java.base/java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:237)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.base/java.net.Socket.connect(Socket.java:609)
+	at java.base/java.net.Socket.connect(Socket.java:558)
+	at java.base/java.net.Socket.<init>(Socket.java:454)
+	at java.base/java.net.Socket.<init>(Socket.java:231)
+	at Client.startClient(Client.java:18)
+	at java.base/java.lang.Thread.run(Thread.java:839)
+
