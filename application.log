@@ -1,4 +1,4 @@
-9월 29, 2023 9:20:13 오후 LoggerManager logInfo
-정보: Hello
-9월 29, 2023 9:20:13 오후 LoggerManager logInfo
-정보: SHA-256 hash: a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e
+9월 29, 2023 11:21:26 오후 LoggerManager logInfo
+정보: [*] AES256 encryption done
+9월 29, 2023 11:21:26 오후 LoggerManager logInfo
+정보: [*] AES256 decryption done
