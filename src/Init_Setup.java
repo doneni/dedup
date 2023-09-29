@@ -7,35 +7,24 @@ import java.util.Base64;
 
 public class Init_Setup
 {
-    public static final int num = 10000;
-    public static final int len = 1000000; // (bytes) maximum length of files
-    public static final int cNum = 100;
-    public static final String iv_1 = generateRandomString(16);
-    public static final String iv_2 = generateRandomString(16);
+    public static final int NUM = 10000;
+    public static final int LEN = 1000000; // (bytes) maximum length of files
+    public static final int CNUM = 100;
+    public static final byte[] IV_1 = generateRandomString(16);
+    public static final byte[] IV_2 = generateRandomString(16);
     private static final String AES_CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
     private static final String key = "THIS_IS_AES_PRIVATE_KEY_FOR_TEST";
     private static final String iv = key.substring(0, 16);
 
-    public String h(String plainText)
+    public static byte[] H(byte[] plainText)
     {
         try
         {
             MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
-            byte[] hash = sha256.digest(plainText.getBytes());
-//            System.out.println("hash" + hash.toString());
+            byte[] hash = sha256.digest(plainText);
 
-//            return hash;
-            /* hex to hexString */
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hash)
-            {
-                String hex = Integer.toHexString(0xFF & b);
-                if (hex.length() == 1)
-                    hexString.append('0');
-                hexString.append(hex);
-            }
             LoggerManager.logInfo("[*] hash operation done");
-            return hexString.toString();
+            return hash;
         } catch (Exception e) {
             e.printStackTrace();
             LoggerManager.logError("[-] hash operation failed", e);
@@ -43,7 +32,7 @@ public class Init_Setup
         return null;
     }
 
-    public String enc(String plainText)
+    public String Enc(String plainText)
     {
         try
         {
@@ -66,7 +55,7 @@ public class Init_Setup
         return null;
     }
 
-    public String dec(String encryptedText)
+    public String Dec(String encryptedText)
     {
         try
         {
@@ -90,12 +79,12 @@ public class Init_Setup
         return null;
     }
 
-    private static String generateRandomString(int len)
+    private static byte[] generateRandomString(int len)
     {
         SecureRandom secureRandom = new SecureRandom();
         byte[] randomBytes = new byte[len];
         secureRandom.nextBytes(randomBytes);
 
-        return Base64.getEncoder().encodeToString(randomBytes);
+        return randomBytes;
     }
 }

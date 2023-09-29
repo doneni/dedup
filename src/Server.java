@@ -8,7 +8,9 @@ import java.util.concurrent.Executors;
 public class Server
 {
     private static final int PORT = 1234;
-    private static final int MAX_CLIENTS = Init_Setup.num;
+    private static final int MAX_CLIENTS = Init_Setup.NUM;
+    private int file_counter = 0;
+    private byte[][] SearchList;
 
     public static void main(String[] args)
     {
@@ -61,6 +63,18 @@ public class Server
                 LoggerManager.logError("[-] clientHandler error", e);
             }
         }
+    }
+
+    public void Server_Init()
+    {
+        // Prepare SearchList : NUM * [256bit || 256 bit || int || int]
+        int numRows = 32 * 2 + 4 * 2;
+        int numCols = Init_Setup.NUM;
+
+        this.SearchList = new byte[numRows][numCols];
+
+        // set file_counter 0
+        this.file_counter = 0;
     }
 }
 
