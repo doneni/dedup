@@ -65,6 +65,7 @@ public class Client {
         byte[] concatArr_2 = concatByteChar(IV_2, M);
         byte[] t = Init_Setup.H(concatArr_2);
 
+        // C = Enc(K, M)
         return t;
     }
 
@@ -83,8 +84,22 @@ public class Client {
         return concatArr;
     }
 
-    public void Client_Response(char[] t, char[] T)
+    public void Client_Response(char Server_R)
     {
+        if(Server_R == 'c')
+        {
+//            // T = H(IV_1 || C)
+//            byte[] concatArr_1 = concatByteChar(IV_1, M);
+//            byte[] K = Init_Setup.H(concatArr_1);
+        }
+        else if (Server_R == 'u')
+        {
 
+        }
+        else if (Server_R == 'd')
+        {
+            // end of process
+            return;
+        }
     }
 }

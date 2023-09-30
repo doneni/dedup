@@ -1,6 +1,7 @@
+import java.util.Arrays;
 public class Main
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
     {
         Init_Setup init = new Init_Setup();
 
@@ -8,20 +9,14 @@ public class Main
 //        System.out.println("SHA256: " + ret);
 //        LoggerManager.logInfo("[*] Init_Setup::h done...");
 
-        /*
-        String encryptedText = init.enc("Hello World");
-        String decryptedText = init.dec(encryptedText);
+        char[] plain = {'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd'};
 
-        System.out.println("Encrypted: " + encryptedText);
-        System.out.println("Decrypted: " + decryptedText);
+        char[] encrypted = init.Enc(new String("Hello World").getBytes("UTF-8"));
+        byte[] decryptedText = init.Dec(encrypted);
 
-        System.out.println(init.iv_1);
-        System.out.println(init.iv_2);
-
-        System.out.println(init.len);
-        System.out.println(init.cNum);
-        System.out.println(init.num);
-         */
+        System.out.println("Plain: " + Arrays.toString(plain));
+        System.out.println("Encrypted: " + Arrays.toString(encrypted));
+        System.out.println("Decrypted: " + Arrays.toString(decryptedText));
 
         Client c = new Client();
 

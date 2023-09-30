@@ -1,2 +1,4 @@
-9월 30, 2023 9:04:09 오전 LoggerManager logInfo
-정보: [*] hash operation done
+9월 30, 2023 9:34:20 오전 LoggerManager logInfo
+정보: [*] AES256 encryption done
+9월 30, 2023 9:34:20 오전 LoggerManager logInfo
+정보: [*] AES256 decryption done

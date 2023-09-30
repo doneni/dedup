@@ -252,7 +252,7 @@ public class Server
         return concatArr;
     }
 
-    public int Server_Check(byte[] t, byte[] T)
+    public void Server_Check(byte[] t, byte[] T)
     {
         char Server_R = '\0';
         byte[] T_ = Server_Search(t);

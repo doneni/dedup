@@ -32,7 +32,7 @@ public class Init_Setup
         return null;
     }
 
-    public String Enc(String plainText)
+    public char[] Enc(byte[] plainBytes)
     {
         try
         {
@@ -42,11 +42,14 @@ public class Init_Setup
             IvParameterSpec ivParameterSpec = new IvParameterSpec(key.substring(0,16).getBytes());
             cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
 
-            byte[] encryptedBytes = cipher.doFinal(plainText.getBytes("UTF-8"));
+            byte[] encryptedBytes = cipher.doFinal(plainBytes);
+            char[] encrypted = new char[encryptedBytes.length];
+            for(int i = 0; i < encryptedBytes.length; i++)
+                encrypted[i] = (char) (encryptedBytes[i] & 0XFF);
 
             LoggerManager.logInfo("[*] AES256 encryption done");
 
-            return Base64.getEncoder().encodeToString(encryptedBytes);
+            return encrypted;
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -55,7 +58,7 @@ public class Init_Setup
         return null;
     }
 
-    public String Dec(String encryptedText)
+    public byte[] Dec(char[] encrypted)
     {
         try
         {
@@ -65,12 +68,15 @@ public class Init_Setup
             IvParameterSpec ivParameterSpec = new IvParameterSpec(iv.getBytes());
             cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec);
 
-            byte[] decodedBytes = Base64.getDecoder().decode(encryptedText);
-            byte[] decryptedBytes = cipher.doFinal(decodedBytes);
+//            byte[] decodedBytes = Base64.getDecoder().decode(encrypted);
+            byte[] encryptedBytes = new byte[encrypted.length];
+            for (int i = 0; i < encrypted.length; i++)
+                encryptedBytes[i] = (byte) (encrypted[i] & 0XFF);
+            byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
 
             LoggerManager.logInfo("[*] AES256 decryption done");
 
-            return new String(decryptedBytes, "UTF-8");
+            return decryptedBytes;
         } catch (Exception e)
         {
             e.printStackTrace();
