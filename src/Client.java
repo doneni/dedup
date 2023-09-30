@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class Client {
     private static final String SERVER_ADDR = "localhost";
     private static final int SERVER_PORT = 1234;
-    private int C_id = 0;
+    public static int C_id = 0;
 
     public static void main(String[] args)
     {

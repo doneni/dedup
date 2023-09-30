@@ -12,7 +12,7 @@ public class Server
     private static final int PORT = 1234;
     private static final int MAX_CLIENTS = Init_Setup.NUM;
     private int file_counter = 0;
-    private byte[][] SearchList;
+    private static byte[][] SearchList;
 
     public static void main(String[] args)
     {
@@ -21,7 +21,7 @@ public class Server
 
         byte[] t = new byte[32];
         for (int i = 0; i < 32; i++) {
-            t[i] = (byte) (i + 1);
+            t[i] = (byte) (i + 3);
         }
 
         System.out.print("t: ");
@@ -29,12 +29,22 @@ public class Server
             System.out.print(b);
         System.out.println();
 
-        byte[] T = s.Server_Search(t);
+//        byte[] T = s.Server_Search(t);
+//
+//        System.out.print("T: ");
+//        for (byte b : T)
+//            System.out.print(b);
+//        System.out.println();
 
-        System.out.print("T: ");
-        for (byte b : T)
-            System.out.print(b);
-        System.out.println();
+        char[] C = {'h', 'e', 'l', 'l', 'o'};
+        s.Server_Upload(t, C, Client.C_id);
+
+        for (int j = 0; j < 4; j++)
+        {
+            for (int i = 0; i < SearchList[j].length; i++)
+                System.out.print(SearchList[j][i] + " ");
+            System.out.println();
+        }
 
         /*
         ExecutorService executor = Executors.newFixedThreadPool(MAX_CLIENTS);
@@ -163,10 +173,8 @@ public class Server
     public byte[] Server_Search(byte[] t)
     {
         // Binary search with t in SearchList
-
         int left = 0;
-//        int right = SearchList.length - 1;
-        int right = 2;
+        int right = file_counter - 1;
 
         while(left <= right)
         {
@@ -198,6 +206,50 @@ public class Server
         return 0;
     }
 
-    public void Server_Upload(byte[] t, )
+    public void Server_Upload(byte[] t, char[] C, int C_id) {
+        // T = H(IV_1 || C)
+        byte[] concatArr = concatByteChar(Init_Setup.IV_1, C);
+        byte[] T = Init_Setup.H(concatArr);
+
+        byte[] data = new byte[72];
+
+        System.arraycopy(t, 0, data, 0, 32);
+        System.arraycopy(T, 0, data, 32, 32);
+        byte[] fileCounterBytes = ByteBuffer.allocate(4).putInt(this.file_counter).array();
+        byte[] CidBytes = ByteBuffer.allocate(4).putInt(C_id).array();
+        System.arraycopy(fileCounterBytes, 0, data, 64, 4);
+        System.arraycopy(CidBytes, 0, data, 68, 4);
+
+        int idx = 0;
+
+        for (int i = 0; i < file_counter; i++)
+        {
+            if (compare(SearchList[i], t) <= 0)
+                idx++;
+            else
+                break;
+        }
+
+        for (int i = file_counter - 1; i > idx; i--)
+            SearchList[i] = SearchList[i - 1];
+        SearchList[idx] = data;
+
+        file_counter++;
+    }
+
+    private byte[] concatByteChar(byte[] byteArr, char[] charArr)
+    {
+        byte[] concatArr = new byte[byteArr.length + charArr.length];
+
+        int idx = 0;
+        for(byte b : byteArr)
+            concatArr[idx++] = b;
+        for(char c : charArr)
+        {
+            concatArr[idx++] = (byte) c;
+        }
+
+        return concatArr;
+    }
 }
 
