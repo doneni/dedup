@@ -251,5 +251,36 @@ public class Server
 
         return concatArr;
     }
+
+    public int Server_Check(byte[] t, byte[] T)
+    {
+        char Server_R = '\0';
+        byte[] T_ = Server_Search(t);
+        //////////////////////TODO///////////////
+        char[] C = {'h', 'e', 'l', 'l', 'o'};
+
+        if(T_ == null)
+        {
+            Server_R = 'u';
+            //////////////////Send to Client//////////
+            Server_Upload(t, C, Client.C_id);
+        }
+        else
+        {
+            Server_R = 'c';
+            //////////////send to client////////////////
+            if(T != T_)
+            {
+                Server_R = 'u';
+                ////////////////send to client//////////
+                Server_Upload(t, C, Client.C_id);
+            }
+            else
+            {
+                Server_R = 'd';
+                /////////// send to client /////////////
+            }
+        }
+    }
 }
 
