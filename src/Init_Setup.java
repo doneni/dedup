@@ -13,8 +13,6 @@ public class Init_Setup
     public static final byte[] IV_1 = generateRandomString(16);
     public static final byte[] IV_2 = generateRandomString(16);
     private static final String AES_CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
-    private static final String key = "THIS_IS_AES_PRIVATE_KEY_FOR_TEST";
-    private static final String iv = key.substring(0, 16);
 
     public static byte[] H(byte[] plainText)
     {
@@ -32,40 +30,56 @@ public class Init_Setup
         return null;
     }
 
-    public char[] Enc(byte[] plainBytes)
+    public static char[] Enc(byte[] plainBytes, char[] charKey)
     {
-        try
-        {
+        byte[] key = new byte[32];
+        for (int i = 0; i < 32; i++)
+            key[i] = (byte) (charKey[i] & 0xFF);
+
+        byte[] iv = new byte[16];
+        System.arraycopy(key, 0, iv, 0, 16);
+
+        try {
             Cipher cipher = Cipher.getInstance(AES_CIPHER_ALGORITHM);
 
-            SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), "AES");
-            IvParameterSpec ivParameterSpec = new IvParameterSpec(key.substring(0,16).getBytes());
+            SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
+            IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
             cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
 
             byte[] encryptedBytes = cipher.doFinal(plainBytes);
             char[] encrypted = new char[encryptedBytes.length];
-            for(int i = 0; i < encryptedBytes.length; i++)
+            for (int i = 0; i < encryptedBytes.length; i++)
                 encrypted[i] = (char) (encryptedBytes[i] & 0XFF);
 
             LoggerManager.logInfo("[*] AES256 encryption done");
 
             return encrypted;
+        } catch (ArrayIndexOutOfBoundsException oobe) {
+            oobe.printStackTrace();
+            LoggerManager.logError("[-] check key size (32 bytes)", oobe);
         } catch (Exception e)
         {
             e.printStackTrace();
-            LoggerManager.logError("[*] AES256 encryption failed", e);
+            LoggerManager.logError("[-] AES256 encryption failed", e);
         }
         return null;
     }
 
-    public byte[] Dec(char[] encrypted)
+    public static byte[] Dec(char[] encrypted, char[] charKey)
     {
+        byte[] key = new byte[32];
+        for (int i = 0; i < 32; i++)
+            key[i] = (byte) (charKey[i] & 0xFF);
+
+        byte[] iv = new byte[16];
+        System.arraycopy(key, 0, iv, 0, 16);
+
         try
         {
             Cipher cipher = Cipher.getInstance(AES_CIPHER_ALGORITHM);
 
-            SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), "AES");
-            IvParameterSpec ivParameterSpec = new IvParameterSpec(iv.getBytes());
+            SecretKeySpec secretKeySpec = new SecretKeySpec(key, "AES");
+            IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
             cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec);
 
 //            byte[] decodedBytes = Base64.getDecoder().decode(encrypted);

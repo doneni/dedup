@@ -10,6 +10,7 @@ public class Client {
     private static final String SERVER_ADDR = "localhost";
     private static final int SERVER_PORT = 1234;
     public static int C_id = 0;
+    private static char[] C;
 
     public static void main(String[] args)
     {
@@ -66,6 +67,9 @@ public class Client {
         byte[] t = Init_Setup.H(concatArr_2);
 
         // C = Enc(K, M)
+        char[] C = Init_Setup.Enc(K, M);
+        this.C = C;
+
         return t;
     }
 
@@ -88,13 +92,14 @@ public class Client {
     {
         if(Server_R == 'c')
         {
-//            // T = H(IV_1 || C)
-//            byte[] concatArr_1 = concatByteChar(IV_1, M);
-//            byte[] K = Init_Setup.H(concatArr_1);
+            // T = H(IV_1 || C)
+            byte[] concatArr = concatByteChar(Init_Setup.IV_1, this.C);
+            byte[] T = Init_Setup.H(concatArr);
+            //////////// send to server //////////////
         }
         else if (Server_R == 'u')
         {
-
+            /////////// send to server //////////////
         }
         else if (Server_R == 'd')
         {

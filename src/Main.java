@@ -10,9 +10,10 @@ public class Main
 //        LoggerManager.logInfo("[*] Init_Setup::h done...");
 
         char[] plain = {'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd'};
+        char[] key = {'k', 'e', 'y', 'k', 'e', 'y', 'k', 'e', 'y', 'k', 'e', 'y', 'k', 'e', 'y', 'k', 'e', 'y', 'k', 'e', 'y', 'k', 'e', 'y', 'k', 'e', 'y', 'k', 'e', 'y', 'k', 'e'};
 
-        char[] encrypted = init.Enc(new String("Hello World").getBytes("UTF-8"));
-        byte[] decryptedText = init.Dec(encrypted);
+        char[] encrypted = init.Enc(new String("Hello World").getBytes("UTF-8"), key);
+        byte[] decryptedText = init.Dec(encrypted, key);
 
         System.out.println("Plain: " + Arrays.toString(plain));
         System.out.println("Encrypted: " + Arrays.toString(encrypted));
