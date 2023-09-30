@@ -1,3 +1,4 @@
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -10,8 +11,8 @@ public class Init_Setup
     public static final int NUM = 10000;
     public static final int LEN = 1000000; // (bytes) maximum length of files
     public static final int CNUM = 100;
-    public static final byte[] IV_1 = generateRandomString(16);
-    public static final byte[] IV_2 = generateRandomString(16);
+    public static final byte[] IV_1 = generateRandomBytes(16);
+    public static final byte[] IV_2 = generateRandomBytes(16);
     private static final String AES_CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
 
     public static byte[] H(byte[] plainText)
@@ -22,6 +23,7 @@ public class Init_Setup
             byte[] hash = sha256.digest(plainText);
 
             LoggerManager.logInfo("[*] hash operation done");
+
             return hash;
         } catch (Exception e) {
             e.printStackTrace();
@@ -30,12 +32,8 @@ public class Init_Setup
         return null;
     }
 
-    public static char[] Enc(byte[] plainBytes, char[] charKey)
+    public static char[] Enc(byte[] key, char[] plainText)
     {
-        byte[] key = new byte[32];
-        for (int i = 0; i < 32; i++)
-            key[i] = (byte) (charKey[i] & 0xFF);
-
         byte[] iv = new byte[16];
         System.arraycopy(key, 0, iv, 0, 16);
 
@@ -46,7 +44,7 @@ public class Init_Setup
             IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
             cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
 
-            byte[] encryptedBytes = cipher.doFinal(plainBytes);
+            byte[] encryptedBytes = cipher.doFinal(plainText.toString().getBytes(StandardCharsets.UTF_8));
             char[] encrypted = new char[encryptedBytes.length];
             for (int i = 0; i < encryptedBytes.length; i++)
                 encrypted[i] = (char) (encryptedBytes[i] & 0XFF);
@@ -82,7 +80,6 @@ public class Init_Setup
             IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
             cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec);
 
-//            byte[] decodedBytes = Base64.getDecoder().decode(encrypted);
             byte[] encryptedBytes = new byte[encrypted.length];
             for (int i = 0; i < encrypted.length; i++)
                 encryptedBytes[i] = (byte) (encrypted[i] & 0XFF);
@@ -94,16 +91,18 @@ public class Init_Setup
         } catch (Exception e)
         {
             e.printStackTrace();
-            LoggerManager.logError("[*] AES256 decryption failed", e);
+            LoggerManager.logError("[-] AES256 decryption failed", e);
         }
         return null;
     }
 
-    private static byte[] generateRandomString(int len)
+    private static byte[] generateRandomBytes(int len)
     {
         SecureRandom secureRandom = new SecureRandom();
         byte[] randomBytes = new byte[len];
         secureRandom.nextBytes(randomBytes);
+
+        LoggerManager.logInfo("[*] generate random bytes done");
 
         return randomBytes;
     }

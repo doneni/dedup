@@ -11,8 +11,8 @@ public class Server
 {
     private static final int PORT = 1234;
     private static final int MAX_CLIENTS = Init_Setup.NUM;
-    private int file_counter = 0;
-    private static byte[][] SearchList;
+    public int file_counter = 0;
+    public static byte[][] SearchList;
 
     public static void main(String[] args)
     {
@@ -109,65 +109,6 @@ public class Server
 
         // set file_counter 0
         this.file_counter = 0;
-
-        //////////////////TEST///////////////////
-        byte[] t = new byte[32];
-        byte[] T = new byte[32];
-        int file_counter = 123;
-        int C_id = 456;
-        for (int i = 0; i < 32; i++)
-        {
-            t[i] = (byte) i;
-            T[i] = (byte) (i + 32);
-        }
-        byte[] fileCounterBytes = ByteBuffer.allocate(4).putInt(file_counter).array();
-        byte[] CidBytes = ByteBuffer.allocate(4).putInt(C_id).array();
-
-        byte[] data0 = new byte[72];
-
-        System.arraycopy(t, 0, data0, 0, 32);
-        System.arraycopy(T,0, data0, 32, 32);
-        System.arraycopy(fileCounterBytes, 0, data0, 64, 4);
-        System.arraycopy(CidBytes, 0, data0, 68, 4);
-
-        SearchList[0] = data0;
-
-        for (int i = 0; i < 32; i++)
-        {
-            t[i] = (byte) (i + 1);
-            T[i] = (byte) (i + 33);
-        }
-
-        byte[] data1 = new byte[72];
-
-        System.arraycopy(t, 0, data1, 0, 32);
-        System.arraycopy(T,0, data1, 32, 32);
-        System.arraycopy(fileCounterBytes, 0, data1, 64, 4);
-        System.arraycopy(CidBytes, 0, data1, 68, 4);
-
-        SearchList[1] = data1;
-
-        for (int i = 0; i < 32; i++)
-        {
-            t[i] = (byte) (i + 2);
-            T[i] = (byte) (i + 34);
-        }
-
-        byte[] data2 = new byte[72];
-
-        System.arraycopy(t, 0, data2, 0, 32);
-        System.arraycopy(T,0, data2, 32, 32);
-        System.arraycopy(fileCounterBytes, 0, data2, 64, 4);
-        System.arraycopy(CidBytes, 0, data2, 68, 4);
-
-        SearchList[2] = data2;
-
-        for (int j = 0; j < 3; j++)
-        {
-            for (int i = 0; i < SearchList[j].length; i++)
-                System.out.print(SearchList[j][i] + " ");
-            System.out.println();
-        }
     }
 
     public byte[] Server_Search(byte[] t)
@@ -191,19 +132,8 @@ public class Server
                 right = mid - 1;
             }
         }
-        System.out.println("not found");
+        System.out.println("[*] not found");
         return null;
-    }
-
-    private static int compare(byte[] a, byte[] b)
-    {
-        for (int i = 0; i < b.length; i++)
-        {
-            int diff = a[i] - b[i];
-            if (diff != 0)
-                return diff;
-        }
-        return 0;
     }
 
     public void Server_Upload(byte[] t, char[] C, int C_id) {
@@ -237,6 +167,62 @@ public class Server
         file_counter++;
     }
 
+    public void Server_Check(byte[] t)
+    {
+        byte[] T_ = Server_Search(t);
+        byte[] T = {};
+        char[] C = {};
+        int C_id = 0;
+        char Server_R = '\0';
+
+        if(T_ == null)
+        {
+            Server_R = 'u';
+
+            ///// send 'Server_R' to client /////
+
+            ///// receive 'C' && 'C_id' from client /////
+
+            Server_Upload(t, C, C_id);
+        }
+        else
+        {
+            Server_R = 'c';
+
+            ///// send 'Server_R' to client /////
+
+            ///// receive 'T' from client /////
+
+            if(T != T_)
+            {
+                Server_R = 'u';
+
+                ///// send 'Server_R' to client /////
+
+                ///// receive 't' && 'C' && 'C_id' from client /////
+
+                Server_Upload(t, C, C_id);
+            }
+            else
+            {
+                Server_R = 'd';
+
+                ///// send 'Server_R' to client /////
+            }
+        }
+    }
+
+    private static int compare(byte[] a, byte[] b)
+    {
+        for (int i = 0; i < b.length; i++)
+        {
+            int diff = a[i] - b[i];
+            if (diff != 0)
+                return diff;
+        }
+        return 0;
+    }
+
     private byte[] concatByteChar(byte[] byteArr, char[] charArr)
     {
         byte[] concatArr = new byte[byteArr.length + charArr.length];
@@ -250,37 +236,6 @@ public class Server
         }
 
         return concatArr;
-    }
-
-    public void Server_Check(byte[] t, byte[] T)
-    {
-        char Server_R = '\0';
-        byte[] T_ = Server_Search(t);
-        //////////////////////TODO///////////////
-        char[] C = {'h', 'e', 'l', 'l', 'o'};
-
-        if(T_ == null)
-        {
-            Server_R = 'u';
-            //////////////////Send to Client//////////
-            Server_Upload(t, C, Client.C_id);
-        }
-        else
-        {
-            Server_R = 'c';
-            //////////////send to client////////////////
-            if(T != T_)
-            {
-                Server_R = 'u';
-                ////////////////send to client//////////
-                Server_Upload(t, C, Client.C_id);
-            }
-            else
-            {
-                Server_R = 'd';
-                /////////// send to client /////////////
-            }
-        }
     }
 }
 

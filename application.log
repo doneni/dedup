@@ -1,4 +1,28 @@
-9월 30, 2023 9:47:41 오전 LoggerManager logInfo
-정보: [*] AES256 encryption done
-9월 30, 2023 9:47:41 오전 LoggerManager logInfo
-정보: [*] AES256 decryption done
+10월 01, 2023 4:03:47 오전 LoggerManager logInfo
+INFO: [*] Client_Req Test...
+10월 01, 2023 4:03:47 오전 LoggerManager logInfo
+INFO: [*] generate random bytes done
+10월 01, 2023 4:03:47 오전 LoggerManager logInfo
+INFO: [*] generate random bytes done
+10월 01, 2023 4:03:47 오전 LoggerManager logInfo
+INFO: [*] hash operation done
+10월 01, 2023 4:03:47 오전 LoggerManager logInfo
+INFO: [*] hash operation done
+10월 01, 2023 4:03:47 오전 LoggerManager logInfo
+INFO: [*] AES256 encryption done
+10월 01, 2023 4:03:47 오전 LoggerManager logInfo
+INFO: [*] Client_Response Test...
+10월 01, 2023 4:03:47 오전 LoggerManager logInfo
+INFO: c
+10월 01, 2023 4:03:47 오전 LoggerManager logInfo
+INFO: [*] hash operation done
+10월 01, 2023 4:03:47 오전 LoggerManager logInfo
+INFO: [*] Server_Init Test...
+10월 01, 2023 4:03:47 오전 LoggerManager logInfo
+INFO: [*] Server_Search Test...
+10월 01, 2023 4:03:47 오전 LoggerManager logInfo
+INFO: [*] Server_Upload Test...
+10월 01, 2023 4:03:47 오전 LoggerManager logInfo
+INFO: [*] hash operation done
+10월 01, 2023 4:03:47 오전 LoggerManager logInfo
+INFO: Upload
