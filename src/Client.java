@@ -1,21 +1,12 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.util.Random;
-import java.util.Scanner;
+import java.io.*;
 
 public class Client {
-    private static final String SERVER_ADDR = "localhost";
+    private static final String SERVER_ADDRESS = "localhost";
     private static final int SERVER_PORT = 1234;
     public static int C_id = 0;
     public static char[] C;
-
-    public static void main(String[] args)
-    {
-//        new Thread(Client::startClient).start();
-    }
 
     public byte[] Client_Req(char[] M, byte[] IV_1, byte[] IV_2)
     {
@@ -73,25 +64,6 @@ public class Client {
         }
     }
 
-    private static void startClient()
-    {
-        try(
-                Socket socket = new Socket(SERVER_ADDR, SERVER_PORT);
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
-
-        ) {
-            out.println("Hello, server!");
-
-            String response = in.readLine();
-            System.out.println("Server Response: " + response);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            LoggerManager.logError("[-] client error", e);
-        }
-    }
-
     private byte[] concatByteChar(byte[] byteArr, char[] charArr)
     {
         byte[] concatArr = new byte[byteArr.length + charArr.length];
@@ -105,5 +77,29 @@ public class Client {
         }
 
         return concatArr;
+    }
+
+    private static void sendC(char[] C)
+    {
+        try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+
+            // Send 'C' to the server
+            String userInputMessage = String.valueOf(C);
+            if (userInputMessage != null)
+            {
+                out.println(userInputMessage);
+                System.out.println("Sent 'C' to the server: " + userInputMessage);
+            }
+
+            String message;
+            while ((message = in.readLine()) != null)
+            {
+                System.out.println("Received from server: " + message);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

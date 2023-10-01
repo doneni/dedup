@@ -1,12 +1,8 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.nio.ByteBuffer;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.ByteBuffer;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.Arrays;
+
 public class Server
 {
     private static final int PORT = 1234;
@@ -17,86 +13,7 @@ public class Server
     public static void main(String[] args)
     {
         Server s = new Server();
-        s.Server_Init();
-
-        byte[] t = new byte[32];
-        for (int i = 0; i < 32; i++) {
-            t[i] = (byte) (i + 3);
-        }
-
-        System.out.print("t: ");
-        for (byte b : t)
-            System.out.print(b);
-        System.out.println();
-
-//        byte[] T = s.Server_Search(t);
-//
-//        System.out.print("T: ");
-//        for (byte b : T)
-//            System.out.print(b);
-//        System.out.println();
-
-        char[] C = {'h', 'e', 'l', 'l', 'o'};
-        s.Server_Upload(t, C, Client.C_id);
-
-        for (int j = 0; j < 4; j++)
-        {
-            for (int i = 0; i < SearchList[j].length; i++)
-                System.out.print(SearchList[j][i] + " ");
-            System.out.println();
-        }
-
-        /*
-        ExecutorService executor = Executors.newFixedThreadPool(MAX_CLIENTS);
-
-        try (ServerSocket serverSocket = new ServerSocket(PORT))
-        {
-            System.out.println("Server started. Listening on port " + PORT);
-
-            while(true)
-            {
-                Socket clientSocket = serverSocket.accept();
-                System.out.println("New client connected: " + clientSocket);
-
-                executor.execute(new ClientHandler(clientSocket));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            LoggerManager.logError("[-] server error", e);
-        } finally {
-            executor.shutdown();
-        }
-         */
-    }
-
-    private static class ClientHandler implements Runnable
-    {
-        private Socket clientSocket;
-
-        public ClientHandler(Socket clientSocket)
-        {
-            this.clientSocket = clientSocket;
-        }
-
-        @Override
-        public void run()
-        {
-            try (
-                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-            ) {
-                String inputLine;
-                while((inputLine = in.readLine()) != null)
-                {
-                    System.out.println("Received from Client: " + inputLine);
-                    out.println("Server received: " + inputLine);
-                }
-                clientSocket.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-                LoggerManager.logError("[-] clientHandler error", e);
-            }
-        }
+        s.recvC('u');
     }
 
     public void Server_Init()
@@ -236,6 +153,29 @@ public class Server
         }
 
         return concatArr;
+    }
+
+    private void recvC(char Server_R)
+    {
+        try (ServerSocket serverSocket = new ServerSocket(PORT))
+        {
+            System.out.println("Server started. Waiting for a client...");
+
+            while (true)
+            {
+                // Inside your while loop where you accept clients
+                Socket clientSocket = serverSocket.accept();
+                System.out.println("Client connected: " + clientSocket);
+
+                // Create a ClientHandler and run it in a new thread
+                ClientHandler clientHandler = new ClientHandler(clientSocket);
+                Thread handlerThread = new Thread(clientHandler);
+                handlerThread.start();
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 
