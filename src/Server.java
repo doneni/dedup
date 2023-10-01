@@ -6,26 +6,20 @@ import java.net.Socket;
 public class Server
 {
     private static final int PORT = 1234;
-    private static final int MAX_CLIENTS = Init_Setup.NUM;
-    public int file_counter = 0;
-    public static byte[][] SearchList;
-
-    public static void main(String[] args)
-    {
-        Server s = new Server();
-        s.recvC('u');
-    }
+    private static final int MAX_CLIENTS = Init_Setup.getNUM();
+    private static int file_counter = 0;
+    private static byte[][] SearchList;
 
     public void Server_Init()
     {
         // Prepare SearchList : NUM * [256bit || 256 bit || int || int]
         int numRows = 32 * 2 + 4 * 2;
-        int numCols = Init_Setup.NUM;
+        int numCols = Init_Setup.getNUM();
 
-        this.SearchList = new byte[numRows][numCols];
+        SearchList = new byte[numRows][numCols];
 
         // set file_counter 0
-        this.file_counter = 0;
+        file_counter = 0;
     }
 
     public byte[] Server_Search(byte[] t)
@@ -62,7 +56,7 @@ public class Server
 
         System.arraycopy(t, 0, data, 0, 32);
         System.arraycopy(T, 0, data, 32, 32);
-        byte[] fileCounterBytes = ByteBuffer.allocate(4).putInt(this.file_counter).array();
+        byte[] fileCounterBytes = ByteBuffer.allocate(4).putInt(file_counter).array();
         byte[] CidBytes = ByteBuffer.allocate(4).putInt(C_id).array();
         System.arraycopy(fileCounterBytes, 0, data, 64, 4);
         System.arraycopy(CidBytes, 0, data, 68, 4);
@@ -98,6 +92,7 @@ public class Server
 
             ///// send 'Server_R' to client /////
 
+            recvC(Server_R);
             ///// receive 'C' && 'C_id' from client /////
 
             Server_Upload(t, C, C_id);
@@ -116,6 +111,7 @@ public class Server
 
                 ///// send 'Server_R' to client /////
 
+                recvC(Server_R);
                 ///// receive 't' && 'C' && 'C_id' from client /////
 
                 Server_Upload(t, C, C_id);
@@ -163,15 +159,12 @@ public class Server
 
             while (true)
             {
-                // Inside your while loop where you accept clients
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Client connected: " + clientSocket);
 
-                // Create a ClientHandler and run it in a new thread
                 ClientHandler clientHandler = new ClientHandler(clientSocket);
                 Thread handlerThread = new Thread(clientHandler);
                 handlerThread.start();
-
             }
         } catch (IOException e) {
             e.printStackTrace();

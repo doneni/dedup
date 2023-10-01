@@ -5,14 +5,14 @@ import java.io.*;
 public class Client {
     private static final String SERVER_ADDRESS = "localhost";
     private static final int SERVER_PORT = 1234;
-    public static int C_id = 0;
-    public static char[] C;
+    private static int C_id = 0;
+    private static char[] C;
 
     public byte[] Client_Req(char[] M, byte[] IV_1, byte[] IV_2)
     {
         // Choose random C_id from [1, CNUM]
         Random random = new Random();
-        this.C_id = random.nextInt(Init_Setup.CNUM) + 1;
+        C_id = random.nextInt(Init_Setup.getCNUM()) + 1;
 
         // K = H(IV_1 || M)
         byte[] concatArr_1 = concatByteChar(IV_1, M);
@@ -23,8 +23,7 @@ public class Client {
         byte[] t = Init_Setup.H(concatArr_2);
 
         // C = Enc(K, M)
-        char[] C = Init_Setup.Enc(K, M);
-        this.C = C;
+        C = Init_Setup.Enc(K, M);
 
         ///// send 't' to server /////
         return t;
@@ -37,7 +36,7 @@ public class Client {
             System.out.println("[*] received 'Check T'");
 
             // T = H(IV_1 || C)
-            byte[] concatArr = concatByteChar(Init_Setup.IV_1, this.C);
+            byte[] concatArr = concatByteChar(Init_Setup.IV_1, C);
             byte[] T = Init_Setup.H(concatArr);
 
             System.out.print("Target T (" + T.length +"bytes): ");
@@ -51,7 +50,9 @@ public class Client {
         {
             System.out.println("[*] received 'Upload'");
 
-            ///// send 'C' && 'C_id" to server ///// -> TODO
+            sendC(C);
+
+            ///// send 'C' && 'C_id" to server /////
         }
         // duplicate
         else if (Server_R == 'd')
@@ -101,5 +102,11 @@ public class Client {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    public static int getC_id()
+    {
+        return C_id;
     }
 }

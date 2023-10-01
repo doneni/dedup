@@ -8,9 +8,9 @@ import java.util.Base64;
 
 public class Init_Setup
 {
-    public static final int NUM = 10000;
-    public static final int LEN = 1000000; // (bytes) maximum length of files
-    public static final int CNUM = 100;
+    private static final int NUM = 10000;
+    private static final int LEN = 1000000; // (bytes) maximum length of files
+    private static final int CNUM = 100;
     public static final byte[] IV_1 = generateRandomBytes(16);
     public static final byte[] IV_2 = generateRandomBytes(16);
     private static final String AES_CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
@@ -105,5 +105,20 @@ public class Init_Setup
         LoggerManager.logInfo("[*] generate random bytes done");
 
         return randomBytes;
+    }
+
+    public static int getNUM()
+    {
+        return NUM;
+    }
+
+    public static int getLEN()
+    {
+        return LEN;
+    }
+
+    public static int getCNUM()
+    {
+        return CNUM;
     }
 }
