@@ -4,7 +4,6 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 import java.security.SecureRandom;
-import java.util.Base64;
 
 public class Init_Setup
 {
