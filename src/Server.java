@@ -10,6 +10,11 @@ public class Server
     private static int file_counter = 0;
     private static byte[][] SearchList;
 
+    public static void main(String[] args)
+    {
+        LoggerManager.logInfo("server run");
+    }
+
     public void Server_Init()
     {
         // Prepare SearchList : NUM * [256bit || 256 bit || int || int]

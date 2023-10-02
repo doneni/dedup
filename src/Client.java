@@ -8,6 +8,11 @@ public class Client {
     private static int C_id = 0;
     private static char[] C;
 
+    public static void main(String[] args)
+    {
+        LoggerManager.logInfo("client run");
+    }
+
     public byte[] Client_Req(char[] M, byte[] IV_1, byte[] IV_2)
     {
         // Choose random C_id from [1, CNUM]
