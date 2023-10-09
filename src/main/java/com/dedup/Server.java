@@ -1,3 +1,5 @@
+package com.dedup;
+
 import java.nio.ByteBuffer;
 import java.io.*;
 import java.net.ServerSocket;

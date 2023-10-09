@@ -1,12 +1,10 @@
-import java.io.IOException;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
+package com.dedup;
 
-public class LoggerManager {
-    private static final Logger logger = Logger.getLogger(LoggerManager.class.getName());
+import java.io.IOException;
+import java.util.logging.*;
+
+public class LoggerManagerTest {
+    private static final Logger logger = Logger.getLogger(LoggerManagerTest.class.getName());
     private static boolean loggingEnabled = true;
 
     static {

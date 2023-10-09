@@ -1,8 +1,15 @@
+package com.dedup;
+
+import com.dedup.Init;
+import com.dedup.LoggerManager;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Random;
-import java.io.*;
 
-public class Client {
+public class ClientTest {
     private static final String SERVER_ADDRESS = "localhost";
     private static final int SERVER_PORT = 1234;
     private static int C_id = 0;
@@ -17,18 +24,18 @@ public class Client {
     {
         // Choose random C_id from [1, CNUM]
         Random random = new Random();
-        C_id = random.nextInt(M.getCNUM()) + 1;
+        C_id = random.nextInt(Init.getCNUM()) + 1;
 
         // K = H(IV_1 || M)
         byte[] concatArr_1 = concatByteChar(IV_1, M);
-        byte[] K = M.h(concatArr_1);
+        byte[] K = Init.h(concatArr_1);
 
         // t = H(IV_2 || M)
         byte[] concatArr_2 = concatByteChar(IV_2, M);
-        byte[] t = M.h(concatArr_2);
+        byte[] t = Init.h(concatArr_2);
 
         // C = Enc(K, M)
-        C = M.enc(K, M);
+        C = Init.enc(K, M);
 
         ///// send 't' to server /////
         return t;

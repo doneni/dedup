@@ -1,11 +1,15 @@
+package com.dedup;
+
+import com.dedup.LoggerManager;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
-import javax.crypto.spec.IvParameterSpec;
 import java.security.SecureRandom;
 
-public class Init
+public class InitTest
 {
     private static final int NUM = 10000;
     private static final int LEN = 1000000; // (bytes) maximum length of files
