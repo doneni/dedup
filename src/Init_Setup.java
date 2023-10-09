@@ -21,7 +21,7 @@ public class Init_Setup
             MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
             byte[] hash = sha256.digest(plainText);
 
-            LoggerManager.logInfo("[*] hash operation done");
+            LoggerManager.logInfo("[+] hash operation done");
 
             return hash;
         } catch (Exception e) {
@@ -48,7 +48,7 @@ public class Init_Setup
             for (int i = 0; i < encryptedBytes.length; i++)
                 encrypted[i] = (char) (encryptedBytes[i] & 0XFF);
 
-            LoggerManager.logInfo("[*] AES256 encryption done");
+            LoggerManager.logInfo("[+] AES256 encryption done");
 
             return encrypted;
         } catch (ArrayIndexOutOfBoundsException oobe) {
@@ -84,7 +84,7 @@ public class Init_Setup
                 encryptedBytes[i] = (byte) (encrypted[i] & 0XFF);
             byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
 
-            LoggerManager.logInfo("[*] AES256 decryption done");
+            LoggerManager.logInfo("[+] AES256 decryption done");
 
             return decryptedBytes;
         } catch (Exception e)
@@ -101,7 +101,7 @@ public class Init_Setup
         byte[] randomBytes = new byte[len];
         secureRandom.nextBytes(randomBytes);
 
-        LoggerManager.logInfo("[*] generate random bytes done");
+        LoggerManager.logInfo("[+] generate random bytes done");
 
         return randomBytes;
     }

@@ -7,7 +7,7 @@ import java.util.logging.SimpleFormatter;
 
 public class LoggerManager {
     private static final Logger logger = Logger.getLogger(LoggerManager.class.getName());
-    private static boolean loggingEnabled = false;
+    private static boolean loggingEnabled = true;
 
     static {
         try

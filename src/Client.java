@@ -38,7 +38,7 @@ public class Client {
     {
         if(Server_R == 'c')
         {
-            System.out.println("[*] received 'Check T'");
+            System.out.println("received 'Check T'");
 
             // T = H(IV_1 || C)
             byte[] concatArr = concatByteChar(Init_Setup.IV_1, C);
@@ -53,7 +53,7 @@ public class Client {
         }
         else if (Server_R == 'u')
         {
-            System.out.println("[*] received 'Upload'");
+            System.out.println("[+] received 'Upload'");
 
             sendC(C);
 
@@ -62,7 +62,7 @@ public class Client {
         // duplicate
         else if (Server_R == 'd')
         {
-            System.out.println("[*] received 'Duplicate'");
+            System.out.println("[+] received 'Duplicate'");
 
             // end of process
             int status = 0;
@@ -96,13 +96,13 @@ public class Client {
             if (userInputMessage != null)
             {
                 out.println(userInputMessage);
-                System.out.println("Sent 'C' to the server: " + userInputMessage);
+                System.out.println("[+] Sent 'C' to the server: " + userInputMessage);
             }
 
             String message;
             while ((message = in.readLine()) != null)
             {
-                System.out.println("Received from server: " + message);
+                System.out.println("[+] Received from server: " + message);
             }
         } catch (Exception e) {
             e.printStackTrace();

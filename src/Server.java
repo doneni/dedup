@@ -48,7 +48,7 @@ public class Server
                 right = mid - 1;
             }
         }
-        System.out.println("[*] not found");
+        System.out.println("[+] not found");
         return null;
     }
 
@@ -160,12 +160,12 @@ public class Server
     {
         try (ServerSocket serverSocket = new ServerSocket(PORT))
         {
-            System.out.println("Server started. Waiting for a client...");
+            System.out.println("[+] Server started. Waiting for a client...");
 
             while (true)
             {
                 Socket clientSocket = serverSocket.accept();
-                System.out.println("Client connected: " + clientSocket);
+                System.out.println("[*] Client connected: " + clientSocket);
 
                 ClientHandler clientHandler = new ClientHandler(clientSocket);
                 Thread handlerThread = new Thread(clientHandler);
