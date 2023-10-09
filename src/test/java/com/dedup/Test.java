@@ -7,13 +7,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-// run: $ java -cp build/classes/java/main com.dedup.Test
+// run: $ java -cp build/classes/java/main com.dedup Test
 
 public class Test {
     public static void main(String[] args) throws Exception
     {
-        char[] file = getFileChars(new String("resource/jabberwocky.txt"));
-
+        char[] file1 = getFileChars(new String("resource/jabberwocky.txt"));
+        char[] file2 = getFileChars(new String("resource/agatha.txt"));
         System.out.println("Hello World");
 
     }
