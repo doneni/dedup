@@ -13,38 +13,38 @@ public class Client {
         LoggerManager.logInfo("client run");
     }
 
-    public byte[] Client_Req(char[] M, byte[] IV_1, byte[] IV_2)
+    public byte[] clientReq(char[] M, byte[] IV_1, byte[] IV_2)
     {
         // Choose random C_id from [1, CNUM]
         Random random = new Random();
-        C_id = random.nextInt(Init_Setup.getCNUM()) + 1;
+        C_id = random.nextInt(M.getCNUM()) + 1;
 
         // K = H(IV_1 || M)
         byte[] concatArr_1 = concatByteChar(IV_1, M);
-        byte[] K = Init_Setup.H(concatArr_1);
+        byte[] K = M.h(concatArr_1);
 
         // t = H(IV_2 || M)
         byte[] concatArr_2 = concatByteChar(IV_2, M);
-        byte[] t = Init_Setup.H(concatArr_2);
+        byte[] t = M.h(concatArr_2);
 
         // C = Enc(K, M)
-        C = Init_Setup.Enc(K, M);
+        C = M.enc(K, M);
 
         ///// send 't' to server /////
         return t;
     }
 
-    public void Client_Response(char Server_R)
+    public void clientReqesponse(char Server_R)
     {
         if(Server_R == 'c')
         {
-            System.out.println("received 'Check T'");
+            System.out.println("[+] received 'Check T'");
 
             // T = H(IV_1 || C)
-            byte[] concatArr = concatByteChar(Init_Setup.IV_1, C);
-            byte[] T = Init_Setup.H(concatArr);
+            byte[] concatArr = concatByteChar(Init.IV_1, C);
+            byte[] T = Init.h(concatArr);
 
-            System.out.print("Target T (" + T.length +"bytes): ");
+            System.out.print("[+] Target T (" + T.length +"bytes): ");
             for (byte b : T)
                 System.out.print(String.format("%02X ", b));
             System.out.println();

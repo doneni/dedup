@@ -5,7 +5,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 import java.security.SecureRandom;
 
-public class Init_Setup
+public class Init
 {
     private static final int NUM = 10000;
     private static final int LEN = 1000000; // (bytes) maximum length of files
@@ -14,7 +14,7 @@ public class Init_Setup
     public static final byte[] IV_2 = generateRandomBytes(16);
     private static final String AES_CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
 
-    public static byte[] H(byte[] plainText)
+    public static byte[] h(byte[] plainText)
     {
         try
         {
@@ -31,7 +31,7 @@ public class Init_Setup
         return null;
     }
 
-    public static char[] Enc(byte[] key, char[] plainText)
+    public static char[] enc(byte[] key, char[] plainText)
     {
         byte[] iv = new byte[16];
         System.arraycopy(key, 0, iv, 0, 16);
@@ -62,7 +62,7 @@ public class Init_Setup
         return null;
     }
 
-    public static byte[] Dec(char[] encrypted, char[] charKey)
+    public static byte[] dec(char[] encrypted, char[] charKey)
     {
         byte[] key = new byte[32];
         for (int i = 0; i < 32; i++)

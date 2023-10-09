@@ -6,20 +6,20 @@ import java.net.Socket;
 public class Server
 {
     private static final int PORT = 1234;
-    private static final int MAX_CLIENTS = Init_Setup.getNUM();
+    private static final int MAX_CLIENTS = Init.getNUM();
     private static int file_counter = 0;
     private static byte[][] SearchList;
 
     public static void main(String[] args)
     {
-        LoggerManager.logInfo("server run");
+        LoggerManager.logInfo("[+] server run");
     }
 
-    public void Server_Init()
+    public void serverInit()
     {
         // Prepare SearchList : NUM * [256bit || 256 bit || int || int]
         int numRows = 32 * 2 + 4 * 2;
-        int numCols = Init_Setup.getNUM();
+        int numCols = Init.getNUM();
 
         SearchList = new byte[numRows][numCols];
 
@@ -27,7 +27,7 @@ public class Server
         file_counter = 0;
     }
 
-    public byte[] Server_Search(byte[] t)
+    public byte[] serverSearch(byte[] t)
     {
         // Binary search with t in SearchList
         int left = 0;
@@ -52,10 +52,10 @@ public class Server
         return null;
     }
 
-    public void Server_Upload(byte[] t, char[] C, int C_id) {
+    public void serverUpload(byte[] t, char[] C, int C_id) {
         // T = H(IV_1 || C)
-        byte[] concatArr = concatByteChar(Init_Setup.IV_1, C);
-        byte[] T = Init_Setup.H(concatArr);
+        byte[] concatArr = concatByteChar(Init.IV_1, C);
+        byte[] T = Init.h(concatArr);
 
         byte[] data = new byte[72];
 
@@ -83,9 +83,9 @@ public class Server
         file_counter++;
     }
 
-    public void Server_Check(byte[] t)
+    public void serverCheck(byte[] t)
     {
-        byte[] T_ = Server_Search(t);
+        byte[] T_ = serverSearch(t);
         byte[] T = {};
         char[] C = {};
         int C_id = 0;
@@ -100,7 +100,7 @@ public class Server
             recvC(Server_R);
             ///// receive 'C' && 'C_id' from client /////
 
-            Server_Upload(t, C, C_id);
+            serverUpload(t, C, C_id);
         }
         else
         {
@@ -119,7 +119,7 @@ public class Server
                 recvC(Server_R);
                 ///// receive 't' && 'C' && 'C_id' from client /////
 
-                Server_Upload(t, C, C_id);
+                serverUpload(t, C, C_id);
             }
             else
             {
