@@ -7,9 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-// run: $ java -cp build/classes/java/main com.dedup Test
-
-public class Test {
+public class Main {
     public static void main(String[] args) throws Exception
     {
         char[] file1 = getFileChars(new String("resource/jabberwocky.txt"));
