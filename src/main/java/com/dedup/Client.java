@@ -120,19 +120,4 @@ public class Client {
     {
         return C_id;
     }
-
-    static char[] getFileChars(String filePath)
-    {
-        try {
-            Path path = Paths.get(filePath);
-
-            byte[] fileBytes = Files.readAllBytes(path);
-            char[] fileChars = new String(fileBytes, StandardCharsets.UTF_8).toCharArray();
-
-            return fileChars;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }

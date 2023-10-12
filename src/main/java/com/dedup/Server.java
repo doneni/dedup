@@ -37,6 +37,57 @@ public class Server
         file_counter = 0;
     }
 
+    public void serverCheck(byte[] t)
+    {
+        byte[] T_ = serverSearch(t);
+        byte[] T = {};
+        char[] C = {};
+        int C_id = 0;
+        char Server_R = '\0';
+
+        if(T_ == null)
+        {
+            System.out.println("Server_R: u");
+            Server_R = 'u';
+
+            ///// send 'Server_R' to client /////
+
+            recvC(Server_R);
+            ///// receive 'C' && 'C_id' from client /////
+
+            serverUpload(t, C, C_id);
+        }
+        else
+        {
+            System.out.println("Server_R: c");
+            Server_R = 'c';
+
+            ///// send 'Server_R' to client /////
+
+            ///// receive 'T' from client /////
+
+            if(T != T_)
+            {
+                System.out.println("Server_R: u");
+                Server_R = 'u';
+
+                ///// send 'Server_R' to client /////
+
+                recvC(Server_R);
+                ///// receive 't' && 'C' && 'C_id' from client /////
+
+                serverUpload(t, C, C_id);
+            }
+            else
+            {
+                System.out.println("Server_R: d");
+                Server_R = 'd';
+
+                ///// send 'Server_R' to client /////
+            }
+        }
+    }
+
     public byte[] serverSearch(byte[] t)
     {
         // Binary search with t in SearchList
@@ -93,57 +144,6 @@ public class Server
         file_counter++;
     }
 
-    public void serverCheck(byte[] t)
-    {
-        byte[] T_ = serverSearch(t);
-        byte[] T = {};
-        char[] C = {};
-        int C_id = 0;
-        char Server_R = '\0';
-
-        if(T_ == null)
-        {
-            System.out.println("Server_R: u");
-            Server_R = 'u';
-
-            ///// send 'Server_R' to client /////
-
-            recvC(Server_R);
-            ///// receive 'C' && 'C_id' from client /////
-
-            serverUpload(t, C, C_id);
-        }
-        else
-        {
-            System.out.println("Server_R: c");
-            Server_R = 'c';
-
-            ///// send 'Server_R' to client /////
-
-            ///// receive 'T' from client /////
-
-            if(T != T_)
-            {
-                System.out.println("Server_R: u");
-                Server_R = 'u';
-
-                ///// send 'Server_R' to client /////
-
-                recvC(Server_R);
-                ///// receive 't' && 'C' && 'C_id' from client /////
-
-                serverUpload(t, C, C_id);
-            }
-            else
-            {
-                System.out.println("Server_R: d");
-                Server_R = 'd';
-
-                ///// send 'Server_R' to client /////
-            }
-        }
-    }
-
     private static int compare(byte[] a, byte[] b)
     {
         for (int i = 0; i < b.length; i++)
@@ -188,21 +188,6 @@ public class Server
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    static char[] getFileChars(String filePath)
-    {
-        try {
-            Path path = Paths.get(filePath);
-
-            byte[] fileBytes = Files.readAllBytes(path);
-            char[] fileChars = new String(fileBytes, StandardCharsets.UTF_8).toCharArray();
-
-            return fileChars;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }
 
