@@ -1,8 +1,14 @@
+package com.dedup;
+
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Random;
 import java.io.*;
 
-public class Client {
+public class ClientTest {
     private static final String SERVER_ADDRESS = "localhost";
     private static final int SERVER_PORT = 1234;
     private static int C_id = 0;
@@ -11,40 +17,60 @@ public class Client {
     public static void main(String[] args)
     {
         LoggerManager.logInfo("client run");
+
+        Client c = new Client();
+
+        // load sample file
+        char[] file = getFileChars(new String("resource/jabberwocky.txt"));
+
+        // upload file
+        byte[] t = c.clientReq(file, Init.IV_1, Init.IV_2);
+        System.out.print("t: ");
+        for (byte b: t)
+            System.out.print(b + " ");
+        System.out.println("");
+
+        ///// Send t to Server /////
+
+
+
+        ///// Receive Server_R(in this cases, 'u') from Server /////
+
+        c.clientResponse('u');
     }
 
-    public byte[] Client_Req(char[] M, byte[] IV_1, byte[] IV_2)
+    public byte[] clientReq(char[] M, byte[] IV_1, byte[] IV_2)
     {
         // Choose random C_id from [1, CNUM]
         Random random = new Random();
-        C_id = random.nextInt(Init_Setup.getCNUM()) + 1;
+        C_id = random.nextInt(Init.getCNUM()) + 1;
 
         // K = H(IV_1 || M)
         byte[] concatArr_1 = concatByteChar(IV_1, M);
-        byte[] K = Init_Setup.H(concatArr_1);
+        byte[] K = Init.h(concatArr_1);
 
         // t = H(IV_2 || M)
         byte[] concatArr_2 = concatByteChar(IV_2, M);
-        byte[] t = Init_Setup.H(concatArr_2);
+        byte[] t = Init.h(concatArr_2);
 
         // C = Enc(K, M)
-        C = Init_Setup.Enc(K, M);
+        C = Init.enc(K, M);
 
         ///// send 't' to server /////
         return t;
     }
 
-    public void Client_Response(char Server_R)
+    public void clientResponse(char Server_R)
     {
         if(Server_R == 'c')
         {
-            System.out.println("[*] received 'Check T'");
+            System.out.println("[+] received 'Check T'");
 
             // T = H(IV_1 || C)
-            byte[] concatArr = concatByteChar(Init_Setup.IV_1, C);
-            byte[] T = Init_Setup.H(concatArr);
+            byte[] concatArr = concatByteChar(Init.IV_1, C);
+            byte[] T = Init.h(concatArr);
 
-            System.out.print("Target T (" + T.length +"bytes): ");
+            System.out.print("[+] Target T (" + T.length +"bytes): ");
             for (byte b : T)
                 System.out.print(String.format("%02X ", b));
             System.out.println();
@@ -53,7 +79,7 @@ public class Client {
         }
         else if (Server_R == 'u')
         {
-            System.out.println("[*] received 'Upload'");
+            System.out.println("[+] received 'Upload'");
 
             sendC(C);
 
@@ -62,7 +88,7 @@ public class Client {
         // duplicate
         else if (Server_R == 'd')
         {
-            System.out.println("[*] received 'Duplicate'");
+            System.out.println("[+] received 'Duplicate'");
 
             // end of process
             int status = 0;
@@ -96,13 +122,13 @@ public class Client {
             if (userInputMessage != null)
             {
                 out.println(userInputMessage);
-                System.out.println("Sent 'C' to the server: " + userInputMessage);
+                System.out.println("[+] Sent 'C' to the server: " + userInputMessage);
             }
 
             String message;
             while ((message = in.readLine()) != null)
             {
-                System.out.println("Received from server: " + message);
+                System.out.println("[+] Received from server: " + message);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -113,5 +139,20 @@ public class Client {
     public static int getC_id()
     {
         return C_id;
+    }
+
+    static char[] getFileChars(String filePath)
+    {
+        try {
+            Path path = Paths.get(filePath);
+
+            byte[] fileBytes = Files.readAllBytes(path);
+            char[] fileChars = new String(fileBytes, StandardCharsets.UTF_8).toCharArray();
+
+            return fileChars;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -1,3 +1,5 @@
+package com.dedup;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,7 +20,7 @@ public class ClientHandler implements Runnable {
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
         ) {
             String clientMessage = in.readLine();
-            System.out.println("Received from client: " + clientMessage);
+            System.out.println("[+] Received from client: " + clientMessage);
         } catch (IOException e) {
             e.printStackTrace();
         }

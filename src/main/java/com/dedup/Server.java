@@ -1,25 +1,35 @@
-import java.nio.ByteBuffer;
-import java.io.*;
+package com.dedup;
+
+import com.dedup.ClientHandler;
+import com.dedup.Init;
+import com.dedup.LoggerManager;
+
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class Server
 {
     private static final int PORT = 1234;
-    private static final int MAX_CLIENTS = Init_Setup.getNUM();
+    private static final int MAX_CLIENTS = Init.getNUM();
     private static int file_counter = 0;
     private static byte[][] SearchList;
 
     public static void main(String[] args)
     {
-        LoggerManager.logInfo("server run");
+        LoggerManager.logInfo("[+] server run");
     }
 
-    public void Server_Init()
+    public void serverInit()
     {
         // Prepare SearchList : NUM * [256bit || 256 bit || int || int]
         int numRows = 32 * 2 + 4 * 2;
-        int numCols = Init_Setup.getNUM();
+        int numCols = Init.getNUM();
 
         SearchList = new byte[numRows][numCols];
 
@@ -27,7 +37,58 @@ public class Server
         file_counter = 0;
     }
 
-    public byte[] Server_Search(byte[] t)
+    public void serverCheck(byte[] t)
+    {
+        byte[] T_ = serverSearch(t);
+        byte[] T = {};
+        char[] C = {};
+        int C_id = 0;
+        char Server_R = '\0';
+
+        if(T_ == null)
+        {
+            System.out.println("Server_R: u");
+            Server_R = 'u';
+
+            ///// send 'Server_R' to client /////
+
+            recvC(Server_R);
+            ///// receive 'C' && 'C_id' from client /////
+
+            serverUpload(t, C, C_id);
+        }
+        else
+        {
+            System.out.println("Server_R: c");
+            Server_R = 'c';
+
+            ///// send 'Server_R' to client /////
+
+            ///// receive 'T' from client /////
+
+            if(T != T_)
+            {
+                System.out.println("Server_R: u");
+                Server_R = 'u';
+
+                ///// send 'Server_R' to client /////
+
+                recvC(Server_R);
+                ///// receive 't' && 'C' && 'C_id' from client /////
+
+                serverUpload(t, C, C_id);
+            }
+            else
+            {
+                System.out.println("Server_R: d");
+                Server_R = 'd';
+
+                ///// send 'Server_R' to client /////
+            }
+        }
+    }
+
+    public byte[] serverSearch(byte[] t)
     {
         // Binary search with t in SearchList
         int left = 0;
@@ -48,14 +109,14 @@ public class Server
                 right = mid - 1;
             }
         }
-        System.out.println("[*] not found");
+        System.out.println("[+] not found");
         return null;
     }
 
-    public void Server_Upload(byte[] t, char[] C, int C_id) {
+    public void serverUpload(byte[] t, char[] C, int C_id) {
         // T = H(IV_1 || C)
-        byte[] concatArr = concatByteChar(Init_Setup.IV_1, C);
-        byte[] T = Init_Setup.H(concatArr);
+        byte[] concatArr = concatByteChar(Init.IV_1, C);
+        byte[] T = Init.h(concatArr);
 
         byte[] data = new byte[72];
 
@@ -81,53 +142,6 @@ public class Server
         SearchList[idx] = data;
 
         file_counter++;
-    }
-
-    public void Server_Check(byte[] t)
-    {
-        byte[] T_ = Server_Search(t);
-        byte[] T = {};
-        char[] C = {};
-        int C_id = 0;
-        char Server_R = '\0';
-
-        if(T_ == null)
-        {
-            Server_R = 'u';
-
-            ///// send 'Server_R' to client /////
-
-            recvC(Server_R);
-            ///// receive 'C' && 'C_id' from client /////
-
-            Server_Upload(t, C, C_id);
-        }
-        else
-        {
-            Server_R = 'c';
-
-            ///// send 'Server_R' to client /////
-
-            ///// receive 'T' from client /////
-
-            if(T != T_)
-            {
-                Server_R = 'u';
-
-                ///// send 'Server_R' to client /////
-
-                recvC(Server_R);
-                ///// receive 't' && 'C' && 'C_id' from client /////
-
-                Server_Upload(t, C, C_id);
-            }
-            else
-            {
-                Server_R = 'd';
-
-                ///// send 'Server_R' to client /////
-            }
-        }
     }
 
     private static int compare(byte[] a, byte[] b)
@@ -160,12 +174,12 @@ public class Server
     {
         try (ServerSocket serverSocket = new ServerSocket(PORT))
         {
-            System.out.println("Server started. Waiting for a client...");
+            System.out.println("[+] Server started. Waiting for a client...");
 
             while (true)
             {
                 Socket clientSocket = serverSocket.accept();
-                System.out.println("Client connected: " + clientSocket);
+                System.out.println("[*] Client connected: " + clientSocket);
 
                 ClientHandler clientHandler = new ClientHandler(clientSocket);
                 Thread handlerThread = new Thread(clientHandler);
