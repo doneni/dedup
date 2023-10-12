@@ -8,6 +8,10 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class ServerTest
 {
@@ -19,6 +23,21 @@ public class ServerTest
     public static void main(String[] args)
     {
         LoggerManager.logInfo("[+] server run");
+
+        Client c = new Client();
+        Server s = new Server();
+        s.serverInit();
+
+        // load sample file
+        char[] file = getFileChars(new String("resource/jabberwocky.txt"));
+
+        // upload file
+        byte[] t = c.clientReq(file, Init.IV_1, Init.IV_2);
+
+        ///// receive to from Client /////
+
+        // server check file
+        s.serverCheck(t);
     }
 
     public void serverInit()
@@ -99,6 +118,7 @@ public class ServerTest
 
         if(T_ == null)
         {
+            System.out.println("Server_R: u");
             Server_R = 'u';
 
             ///// send 'Server_R' to client /////
@@ -110,6 +130,7 @@ public class ServerTest
         }
         else
         {
+            System.out.println("Server_R: c");
             Server_R = 'c';
 
             ///// send 'Server_R' to client /////
@@ -118,6 +139,7 @@ public class ServerTest
 
             if(T != T_)
             {
+                System.out.println("Server_R: u");
                 Server_R = 'u';
 
                 ///// send 'Server_R' to client /////
@@ -129,6 +151,7 @@ public class ServerTest
             }
             else
             {
+                System.out.println("Server_R: d");
                 Server_R = 'd';
 
                 ///// send 'Server_R' to client /////
@@ -181,5 +204,19 @@ public class ServerTest
             e.printStackTrace();
         }
     }
-}
 
+    static char[] getFileChars(String filePath)
+    {
+        try {
+            Path path = Paths.get(filePath);
+
+            byte[] fileBytes = Files.readAllBytes(path);
+            char[] fileChars = new String(fileBytes, StandardCharsets.UTF_8).toCharArray();
+
+            return fileChars;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+}

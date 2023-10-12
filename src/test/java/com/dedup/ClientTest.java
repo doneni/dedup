@@ -1,13 +1,12 @@
 package com.dedup;
 
-import com.dedup.Init;
-import com.dedup.LoggerManager;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Random;
+import java.io.*;
 
 public class ClientTest {
     private static final String SERVER_ADDRESS = "localhost";
@@ -18,6 +17,26 @@ public class ClientTest {
     public static void main(String[] args)
     {
         LoggerManager.logInfo("client run");
+
+        Client c = new Client();
+
+        // load sample file
+        char[] file = getFileChars(new String("resource/jabberwocky.txt"));
+
+        // upload file
+        byte[] t = c.clientReq(file, Init.IV_1, Init.IV_2);
+        System.out.print("t: ");
+        for (byte b: t)
+            System.out.print(b + " ");
+        System.out.println("");
+
+        ///// Send t to Server /////
+
+
+
+        ///// Receive Server_R(in this cases, 'u') from Server /////
+
+        c.clientResponse('u');
     }
 
     public byte[] clientReq(char[] M, byte[] IV_1, byte[] IV_2)
@@ -41,7 +60,7 @@ public class ClientTest {
         return t;
     }
 
-    public void clientReqesponse(char Server_R)
+    public void clientResponse(char Server_R)
     {
         if(Server_R == 'c')
         {
@@ -120,5 +139,20 @@ public class ClientTest {
     public static int getC_id()
     {
         return C_id;
+    }
+
+    static char[] getFileChars(String filePath)
+    {
+        try {
+            Path path = Paths.get(filePath);
+
+            byte[] fileBytes = Files.readAllBytes(path);
+            char[] fileChars = new String(fileBytes, StandardCharsets.UTF_8).toCharArray();
+
+            return fileChars;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

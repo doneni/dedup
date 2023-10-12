@@ -1,9 +1,17 @@
 package com.dedup;
 
-import java.nio.ByteBuffer;
-import java.io.*;
+import com.dedup.ClientHandler;
+import com.dedup.Init;
+import com.dedup.LoggerManager;
+
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class Server
 {
@@ -95,6 +103,7 @@ public class Server
 
         if(T_ == null)
         {
+            System.out.println("Server_R: u");
             Server_R = 'u';
 
             ///// send 'Server_R' to client /////
@@ -106,6 +115,7 @@ public class Server
         }
         else
         {
+            System.out.println("Server_R: c");
             Server_R = 'c';
 
             ///// send 'Server_R' to client /////
@@ -114,6 +124,7 @@ public class Server
 
             if(T != T_)
             {
+                System.out.println("Server_R: u");
                 Server_R = 'u';
 
                 ///// send 'Server_R' to client /////
@@ -125,6 +136,7 @@ public class Server
             }
             else
             {
+                System.out.println("Server_R: d");
                 Server_R = 'd';
 
                 ///// send 'Server_R' to client /////
@@ -176,6 +188,21 @@ public class Server
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    static char[] getFileChars(String filePath)
+    {
+        try {
+            Path path = Paths.get(filePath);
+
+            byte[] fileBytes = Files.readAllBytes(path);
+            char[] fileChars = new String(fileBytes, StandardCharsets.UTF_8).toCharArray();
+
+            return fileChars;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
 
