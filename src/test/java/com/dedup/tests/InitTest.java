@@ -1,4 +1,4 @@
-package com.dedup;
+package com.dedup.tests;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -7,13 +7,15 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 import java.security.SecureRandom;
 
+import com.dedup.LoggerManager;
+
 public class InitTest
 {
     private static final int NUM = 10000;
     private static final int LEN = 1000000; // (bytes) maximum length of files
     private static final int CNUM = 100;
-    public static byte[] IV_1 = { 95, -26, 22, -117, -52, -54, -88, -111, 88, -114, 49, -34, -109, -107, -75, 65};
-    public static byte[] IV_2 = { -8, -77, 110, -112, 37, -95, -83, 117, -30, 50, 73, 19, -48, -7, 8, 105};
+    public static final byte[] IV_1 = { 95, -26, 22, -117, -52, -54, -88, -111, 88, -114, 49, -34, -109, -107, -75, 65};
+    public static final byte[] IV_2 = { -8, -77, 110, -112, 37, -95, -83, 117, -30, 50, 73, 19, -48, -7, 8, 105};
     private static final String AES_CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
 
     public static byte[] h(byte[] plainText)

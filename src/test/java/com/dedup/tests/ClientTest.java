@@ -1,12 +1,16 @@
-package com.dedup;
+package com.dedup.tests;
+
+import com.dedup.LoggerManager;
+import com.dedup.Client;
+import com.dedup.Init;
 
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Random;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class ClientTest {
     private static final String SERVER_ADDRESS = "localhost";
@@ -64,7 +68,7 @@ public class ClientTest {
     {
         if(Server_R == 'c')
         {
-            System.out.println("[+] received 'Check T'");
+            LoggerManager.logInfo("[+] received 'Check T'");
 
             // T = H(IV_1 || C)
             byte[] concatArr = concatByteChar(Init.IV_1, C);
@@ -79,7 +83,7 @@ public class ClientTest {
         }
         else if (Server_R == 'u')
         {
-            System.out.println("[+] received 'Upload'");
+            LoggerManager.logInfo("[+] received 'Upload'");
 
             sendC(C);
 
@@ -88,7 +92,7 @@ public class ClientTest {
         // duplicate
         else if (Server_R == 'd')
         {
-            System.out.println("[+] received 'Duplicate'");
+            LoggerManager.logInfo("[+] received 'Duplicate'");
 
             // end of process
             int status = 0;
@@ -122,13 +126,13 @@ public class ClientTest {
             if (userInputMessage != null)
             {
                 out.println(userInputMessage);
-                System.out.println("[+] Sent 'C' to the server: " + userInputMessage);
+                LoggerManager.logInfo("[+] Sent 'C' to the server: " + userInputMessage);
             }
 
             String message;
             while ((message = in.readLine()) != null)
             {
-                System.out.println("[+] Received from server: " + message);
+                LoggerManager.logInfo("[+] Received from server: " + message);
             }
         } catch (Exception e) {
             e.printStackTrace();

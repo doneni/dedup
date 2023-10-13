@@ -1,4 +1,6 @@
-package com.dedup;
+package com.dedup.tests;
+
+import com.dedup.LoggerManager;
 
 import java.io.IOException;
 import java.util.logging.*;

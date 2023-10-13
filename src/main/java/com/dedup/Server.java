@@ -1,17 +1,9 @@
 package com.dedup;
 
-import com.dedup.ClientHandler;
-import com.dedup.Init;
-import com.dedup.LoggerManager;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Server
 {
@@ -47,7 +39,7 @@ public class Server
 
         if(T_ == null)
         {
-            System.out.println("Server_R: u");
+            LoggerManager.logInfo("Server_R: u");
             Server_R = 'u';
 
             ///// send 'Server_R' to client /////
@@ -59,7 +51,7 @@ public class Server
         }
         else
         {
-            System.out.println("Server_R: c");
+            LoggerManager.logInfo("Server_R: c");
             Server_R = 'c';
 
             ///// send 'Server_R' to client /////
@@ -68,7 +60,7 @@ public class Server
 
             if(T != T_)
             {
-                System.out.println("Server_R: u");
+                LoggerManager.logInfo("Server_R: u");
                 Server_R = 'u';
 
                 ///// send 'Server_R' to client /////
@@ -80,7 +72,7 @@ public class Server
             }
             else
             {
-                System.out.println("Server_R: d");
+                LoggerManager.logInfo("Server_R: d");
                 Server_R = 'd';
 
                 ///// send 'Server_R' to client /////
@@ -109,7 +101,7 @@ public class Server
                 right = mid - 1;
             }
         }
-        System.out.println("[+] not found");
+        LoggerManager.logInfo("[+] not found");
         return null;
     }
 
@@ -174,12 +166,12 @@ public class Server
     {
         try (ServerSocket serverSocket = new ServerSocket(PORT))
         {
-            System.out.println("[+] Server started. Waiting for a client...");
+            LoggerManager.logInfo("[+] Server started. Waiting for a client...");
 
             while (true)
             {
                 Socket clientSocket = serverSocket.accept();
-                System.out.println("[*] Client connected: " + clientSocket);
+                LoggerManager.logInfo("[*] Client connected: " + clientSocket);
 
                 ClientHandler clientHandler = new ClientHandler(clientSocket);
                 Thread handlerThread = new Thread(clientHandler);

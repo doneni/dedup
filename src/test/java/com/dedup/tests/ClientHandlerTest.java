@@ -1,4 +1,6 @@
-package com.dedup;
+package com.dedup.tests;
+
+import com.dedup.LoggerManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,7 +22,7 @@ public class ClientHandlerTest implements Runnable {
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
         ) {
             String clientMessage = in.readLine();
-            System.out.println("[+] Received from client: " + clientMessage);
+            LoggerManager.logInfo("[+] Received from client: " + clientMessage);
         } catch (IOException e) {
             e.printStackTrace();
         }

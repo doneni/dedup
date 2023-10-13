@@ -1,10 +1,6 @@
 package com.dedup;
 
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Random;
 import java.io.*;
 
@@ -44,22 +40,17 @@ public class Client {
     {
         if(Server_R == 'c')
         {
-            System.out.println("[+] received 'Check T'");
+            LoggerManager.logInfo("[+] received 'Check T'");
 
             // T = H(IV_1 || C)
             byte[] concatArr = concatByteChar(Init.IV_1, C);
             byte[] T = Init.h(concatArr);
 
-            System.out.print("[+] Target T (" + T.length +"bytes): ");
-            for (byte b : T)
-                System.out.print(String.format("%02X ", b));
-            System.out.println();
-
             ///// send 'T' to server /////
         }
         else if (Server_R == 'u')
         {
-            System.out.println("[+] received 'Upload'");
+            LoggerManager.logInfo("[+] received 'Upload'");
 
             sendC(C);
 
@@ -68,7 +59,7 @@ public class Client {
         // duplicate
         else if (Server_R == 'd')
         {
-            System.out.println("[+] received 'Duplicate'");
+            LoggerManager.logInfo("[+] received 'Duplicate'");
 
             // end of process
             int status = 0;
@@ -102,13 +93,13 @@ public class Client {
             if (userInputMessage != null)
             {
                 out.println(userInputMessage);
-                System.out.println("[+] Sent 'C' to the server: " + userInputMessage);
+                LoggerManager.logInfo("[+] Sent 'C' to the server: " + userInputMessage);
             }
 
             String message;
             while ((message = in.readLine()) != null)
             {
-                System.out.println("[+] Received from server: " + message);
+                LoggerManager.logInfo("[+] Received from server: " + message);
             }
         } catch (Exception e) {
             e.printStackTrace();
