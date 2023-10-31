@@ -27,7 +27,8 @@ public class ClientTest {
         // load sample file
         char[] file = getFileChars(new String("resource/jabberwocky.txt"));
 
-        // upload file
+        // upload file (clientReq)
+        LoggerManager.logInfo("clientReq() test");
         byte[] t = c.clientReq(file, Init.IV_1, Init.IV_2);
         System.out.print("t: ");
         for (byte b: t)
@@ -38,9 +39,11 @@ public class ClientTest {
 
 
 
-        ///// Receive Server_R(in this cases, 'u') from Server /////
+        LoggerManager.logInfo("clientResponse() test");
 
-        c.clientResponse('u');
+        ///// Receive Server_R(option: 'c', 'u', 'd') from Server /////
+        char Server_R = 'c';
+        c.clientResponse(Server_R);
     }
 
     public byte[] clientReq(char[] M, byte[] IV_1, byte[] IV_2)
@@ -64,7 +67,7 @@ public class ClientTest {
         return t;
     }
 
-    public void clientResponse(char Server_R)
+    public void clientResponse(char Server_R) throws Exception
     {
         if(Server_R == 'c')
         {

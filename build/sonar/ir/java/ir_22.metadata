@@ -1,0 +1,2 @@
+com.dedup.Main#main([Ljava/lang/String;)V
+com.dedup.LoggerManager#logInfo(Ljava/lang/String;)V

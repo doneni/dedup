@@ -1,0 +1,6 @@
+projectKey=dedup
+serverUrl=http://localhost:9000
+serverVersion=9.9.2.77730
+dashboardUrl=http://localhost:9000/dashboard?id=dedup
+ceTaskId=AYtEFqaYh4_cffw4OIcg
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AYtEFqaYh4_cffw4OIcg

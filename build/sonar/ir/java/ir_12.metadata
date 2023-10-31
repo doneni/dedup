@@ -1,0 +1,4 @@
+com.dedup.Server#serverSearch([B)[B
+com.dedup.LoggerManager#logInfo(Ljava/lang/String;)V
+com.dedup.Server#compare([B[B)I
+java.lang.System#arraycopy(Ljava/lang/Object;ILjava/lang/Object;II)V

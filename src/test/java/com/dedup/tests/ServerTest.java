@@ -24,10 +24,12 @@ public class ServerTest
 
     public static void main(String[] args)
     {
-        LoggerManager.logInfo("[+] server run");
+        LoggerManager.logInfo("server run");
 
         Client c = new Client();
         Server s = new Server();
+
+        LoggerManager.logInfo("serverInit() test");
         s.serverInit();
 
         // load sample file
@@ -39,6 +41,9 @@ public class ServerTest
         ///// receive to from Client /////
 
         // server check file
+        LoggerManager.logInfo("serverCheck() test");
+        LoggerManager.logInfo("serverSearch() test");
+        LoggerManager.logInfo("serverUpload() test");
         s.serverCheck(t);
     }
 
